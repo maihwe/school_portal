@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link href="https://jsdelivr.net" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-primary shadow-sm mb-4">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">Welcome, {{ student.user.get_full_name }}</span>
+            <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Sign Out</a>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row g-4">
+            <!-- Profile Info Card with Passport Photo Slot -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm p-4 text-center mb-4">
+                    {% if student.passport_photo %}
+                        <img src="{{ student.passport_photo.url }}" class="rounded-circle img-thumbnail mx-auto mb-3" style="width: 130px; height: 130px; object-fit: cover;" alt="Passport">
+                    {% else %}
+                        <div class="rounded-circle bg-secondary bg-opacity-20 d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 130px; height: 130px;">
+                            <span class="text-secondary small">No Passport</span>
+                        </div>
+                    {% endif %}
+                    <h5 class="mb-1">{{ student.user.get_full_name }}</h5>
+                    <p class="text-muted small mb-3">Student Profile</p>
+                    
+                    <div class="text-start border-top pt-3">
+                        <p class="mb-1"><strong>ID:</strong> {{ student.student_id }}</p>
+                        <p class="mb-1"><strong>Class:</strong> {{ student.current_class }}</p>
+                        <p class="mb-0"><strong>Email:</strong> {{ student.user.email }}</p>
+                    </div>
+                </div>
+
+                <!-- Fee Invoice Tracker -->
+                <div class="card border-0 shadow-sm p-4">
+                    <h5 class="text-secondary mb-3">Outstanding School Fees</h5>
+                    <div class="d-flex justify-content-between align-items-center bg-danger bg-opacity-10 p-3 rounded mb-3">
+                        <span class="h6 mb-0 text-danger-emphasis">Unpaid Balance:</span>
+                        <span class="h5 mb-0 text-danger fw-bold">₦{{ total_unpaid }}</span>
+                    </div>
+                    {% for invoice in invoices %}
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-2 small">
+                        <span>{{ invoice.title }}</span>
+                        {% if invoice.is_paid %}
+                            <span class="badge bg-success">Paid</span>
+                        {% else %}
+                            <span class="badge bg-danger">Unpaid</span>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Academic Results Block -->
+            <div class="col-md-8">
+                {% if not pin_verified %}
+                    <!-- LOCKED RESULT STATE -->
+                    <div class="card border-0 shadow-sm p-5 text-center">
+                        <div class="mb-4">
+                            <span style="font-size: 3rem;">🔒</span>
+                        </div>
+                        <h4 class="mb-2">Academic Result Portal</h4>
+                        <p class="text-muted mb-4">Enter your 12-digit scratch card result checker PIN to unlock your terminal scores.</p>
+                        
+                        {% if pin_error %}
+                            <div class="alert alert-danger mx-auto style" style="max-width: 450px;">{{ pin_error }}</div>
+                        {% endif %}
+
+                        <form method="POST" class="mx-auto" style="max-width: 450px;">
+                            {% csrf_token %}
+                            <div class="input-group mb-3">
+                                <input type="text" name="result_pin" class="form-control form-control-lg text-center tracking-widest" placeholder="Enter 12-Digit PIN" required maxlength="12">
+                                <button class="btn btn-primary px-4" type="submit" name="verify_pin">Check Result</button>
+                            </div>
+                        </form>
+                    </div>
+                {% else %}
+                    <!-- UNLOCKED RESULT STATE -->
+                    <div class="card border-0 shadow-sm p-4">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                            <h5 class="text-success mb-0">🎉 Academic Performance Records Unlocked</h5>
+                            <button onclick="window.print()" class="btn btn-sm btn-outline-secondary">Print Report Card</button>
+                        </div>
+                        <table class="table table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>CA (30)</th>
+                                    <th>Exam (70)</th>
+                                    <th>Total (100)</th>
+                                    <th>Term</th>
+                                    <th>Session</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in results %}
+                                <tr>
+                                    <td><strong>{{ result.subject }}</strong></td>
+                                    <td>{{ result.continuous_assessment }}</td>
+                                    <td>{{ result.exam_score }}</td>
+                                    <td class="fw-bold text-primary">{{ result.total_score }}</td>
+                                    <td>{{ result.term }} Term</td>
+                                    <td>{{ result.session }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="6" class="text-center text-muted">No academic records released yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
