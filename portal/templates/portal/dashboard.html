@@ -1,122 +1,211 @@
-<!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
-    <link href="https://jsdelivr.net" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Student Portal | EPM</title>
+<link rel="stylesheet" href="{% static 'portal/site.css' %}">
+<script src="https://unpkg.com/lucide@latest">
+</script>
 </head>
-<body class="bg-light">
-    <!-- Navbar -->
-    <nav class="navbar navbar-dark bg-primary shadow-sm mb-4">
-        <div class="container">
-            <span class="navbar-brand mb-0 h1">Welcome, {{ student.user.get_full_name }}</span>
-            <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Sign Out</a>
-        </div>
-    </nav>
-
-    <div class="container mb-5">
-        <div class="row g-4">
-            <!-- Profile Info Card with Passport Photo Slot -->
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm p-4 text-center mb-4">
-                    {% if student.passport_photo %}
-                        <img src="{{ student.passport_photo.url }}" class="rounded-circle img-thumbnail mx-auto mb-3" style="width: 130px; height: 130px; object-fit: cover;" alt="Passport">
-                    {% else %}
-                        <div class="rounded-circle bg-secondary bg-opacity-20 d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 130px; height: 130px;">
-                            <span class="text-secondary small">No Passport</span>
-                        </div>
-                    {% endif %}
-                    <h5 class="mb-1">{{ student.user.get_full_name }}</h5>
-                    <p class="text-muted small mb-3">Student Profile</p>
-                    
-                    <div class="text-start border-top pt-3">
-                        <p class="mb-1"><strong>ID:</strong> {{ student.student_id }}</p>
-                        <p class="mb-1"><strong>Class:</strong> {{ student.current_class }}</p>
-                        <p class="mb-0"><strong>Email:</strong> {{ student.user.email }}</p>
-                    </div>
-                </div>
-
-                <!-- Fee Invoice Tracker -->
-                <div class="card border-0 shadow-sm p-4">
-                    <h5 class="text-secondary mb-3">Outstanding School Fees</h5>
-                    <div class="d-flex justify-content-between align-items-center bg-danger bg-opacity-10 p-3 rounded mb-3">
-                        <span class="h6 mb-0 text-danger-emphasis">Unpaid Balance:</span>
-                        <span class="h5 mb-0 text-danger fw-bold">₦{{ total_unpaid }}</span>
-                    </div>
-                    {% for invoice in invoices %}
-                    <div class="d-flex justify-content-between align-items-center border-bottom py-2 small">
-                        <span>{{ invoice.title }}</span>
-                        {% if invoice.is_paid %}
-                            <span class="badge bg-success">Paid</span>
-                        {% else %}
-                            <span class="badge bg-danger">Unpaid</span>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Academic Results Block -->
-            <div class="col-md-8">
-                {% if not pin_verified %}
-                    <!-- LOCKED RESULT STATE -->
-                    <div class="card border-0 shadow-sm p-5 text-center">
-                        <div class="mb-4">
-                            <span style="font-size: 3rem;">🔒</span>
-                        </div>
-                        <h4 class="mb-2">Academic Result Portal</h4>
-                        <p class="text-muted mb-4">Enter your 12-digit scratch card result checker PIN to unlock your terminal scores.</p>
-                        
-                        {% if pin_error %}
-                            <div class="alert alert-danger mx-auto style" style="max-width: 450px;">{{ pin_error }}</div>
-                        {% endif %}
-
-                        <form method="POST" class="mx-auto" style="max-width: 450px;">
-                            {% csrf_token %}
-                            <div class="input-group mb-3">
-                                <input type="text" name="result_pin" class="form-control form-control-lg text-center tracking-widest" placeholder="Enter 12-Digit PIN" required maxlength="12">
-                                <button class="btn btn-primary px-4" type="submit" name="verify_pin">Check Result</button>
-                            </div>
-                        </form>
-                    </div>
-                {% else %}
-                    <!-- UNLOCKED RESULT STATE -->
-                    <div class="card border-0 shadow-sm p-4">
-                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                            <h5 class="text-success mb-0">🎉 Academic Performance Records Unlocked</h5>
-                            <button onclick="window.print()" class="btn btn-sm btn-outline-secondary">Print Report Card</button>
-                        </div>
-                        <table class="table table-striped align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Subject</th>
-                                    <th>CA (30)</th>
-                                    <th>Exam (70)</th>
-                                    <th>Total (100)</th>
-                                    <th>Term</th>
-                                    <th>Session</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for result in results %}
-                                <tr>
-                                    <td><strong>{{ result.subject }}</strong></td>
-                                    <td>{{ result.continuous_assessment }}</td>
-                                    <td>{{ result.exam_score }}</td>
-                                    <td class="fw-bold text-primary">{{ result.total_score }}</td>
-                                    <td>{{ result.term }} Term</td>
-                                    <td>{{ result.session }}</td>
-                                </tr>
-                                {% empty %}
-                                <tr><td colspan="6" class="text-center text-muted">No academic records released yet.</td></tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
+<body class="portal-body">
+<header class="dash-nav">
+<div class="shell">
+<a class="brand" href="/">
+<span class="mark">EP</span>
+<span>EDOR PETER'S<br>MEMORIAL SCHOOL</span>
+</a>
+<div class="profile-pill">
+<span class="avatar">{{ student.user.first_name|first }}{{ student.user.last_name|first }}
+</span>
+<span>{{ student.user.first_name }}{% if student.middle_name %} {{ student.middle_name }}{% endif %} {{ student.user.last_name }}
+</span>
+<a href="{% url 'logout' %}">
+<i data-lucide="log-out" width="17">
+</i>
+</a>
+</div>
+</div>
+</header>
+<main class="dashboard">
+<div class="dash-head">
+<div>
+<div class="eyebrow" style="color:var(--green)">Student dashboard</div>
+<h1>Welcome back, {{ student.user.first_name }}.</h1>
+<p>{{ student.current_class }} &middot; {{ student.student_id }} &middot; 2026/2027 session</p>
+</div>
+<span style="font-size:13px;color:var(--muted)">Friday, 21 August 2026</span>
+</div>
+<div class="dash-grid">
+<aside class="side">
+<div class="student-card">
+<div class="big-avatar">{{ student.user.first_name|first }}{{ student.user.last_name|first }}
+</div>
+<h3>{{ student.user.first_name }}{% if student.middle_name %} {{ student.middle_name }}{% endif %} {{ student.user.last_name }}
+</h3>
+<span>{{ student.student_id }}
+</span>
+</div>
+<a class="active" href="#overview">
+<i data-lucide="layout-dashboard" width="17">
+</i> Overview</a>
+<a href="#results">
+<i data-lucide="chart-no-axes-combined" width="17">
+</i> My results</a>
+<a href="#fees">
+<i data-lucide="wallet-cards" width="17">
+</i> Fees & payments</a>
+<a href="#materials">
+<i data-lucide="book-open" width="17">
+</i> Study materials</a>
+</aside>
+<section>
+<div id="overview" class="main-grid">
+<div class="metric">
+<i data-lucide="graduation-cap">
+</i>
+<strong>{{ student.current_class }}
+</strong>
+<span>Current class</span>
+</div>
+<div class="metric">
+<i data-lucide="receipt-text">
+</i>
+<strong>NGN {{ total_unpaid }}
+</strong>
+<span>Outstanding balance</span>
+</div>
+<div class="metric">
+<i data-lucide="calendar-check">
+</i>
+<strong>Term 1</strong>
+<span>Current academic term</span>
+</div>
+</div>
+<section id="results" class="panel">
+<div class="panel-head">
+<div>
+<h2>Academic results</h2>
+<small style="color:var(--muted)">View only after result PIN verification</small>
+</div>{% if pin_verified %}
+<button onclick="window.print()" class="button ghost" style="color:var(--green);padding:8px 10px">
+<i data-lucide="printer" width="15">
+</i>
+</button>{% endif %}
+</div>{% if not pin_verified %}
+<div style="background:#f7fbf9;border:1px solid #d7e9df;padding:23px">
+<strong>Unlock your term result</strong>
+<p style="color:var(--muted);font-size:13px">Enter the 12-digit PIN from your result checker card.</p>{% if pin_error %}
+<p class="error">{{ pin_error }}
+</p>{% endif %}
+<form method="post" style="display:flex;gap:9px">{% csrf_token %}
+<input style="flex:1;padding:11px;border:1px solid #bccad4" name="result_pin" maxlength="12" placeholder="Enter result PIN" required>
+<button class="button" name="verify_pin">Check result</button>
+</form>
+</div>{% else %}
+<table class="table">
+<thead>
+<tr>
+<th>Subject</th>
+<th>CA</th>
+<th>Exam</th>
+<th>Total</th>
+<th>Term</th>
+</tr>
+</thead>
+<tbody>{% for result in results %}
+<tr>
+<td>
+<strong>{{ result.subject }}
+</strong>
+</td>
+<td>{{ result.continuous_assessment }}/30</td>
+<td>{{ result.exam_score }}/70</td>
+<td>{{ result.total_score }}
+</td>
+<td>{{ result.term }} term</td>
+</tr>{% empty %}
+<tr>
+<td colspan="5">No result has been released for this term.</td>
+</tr>{% endfor %}
+</tbody>
+</table>{% endif %}
+</section>
+<section id="fees" class="panel">
+<div class="panel-head">
+<div>
+<h2>Fees & payments</h2>
+<small style="color:var(--muted)">Your current account statement</small>
+</div>{% if messages %}{% for message in messages %}
+<div class="badge">{{ message }}
+</div>{% endfor %}{% endif %}
+</div>
+<table class="table">
+<thead>
+<tr>
+<th>Description</th>
+<th>Date issued</th>
+<th>Amount</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>{% for invoice in invoices %}
+<tr>
+<td>
+<strong>{{ invoice.title }}
+</strong>
+</td>
+<td>{{ invoice.date_created|date:'d M Y' }}
+</td>
+<td>NGN {{ invoice.amount }}
+</td>
+<td>
+<span class="badge {% if not invoice.is_paid %}due{% endif %}">{% if invoice.is_paid %}Paid{% else %}
+<form method="post" action="{% url 'demo_payment' invoice.id %}" style="display:inline">{% csrf_token %}
+<button type="submit" style="border:0;background:transparent;color:inherit;font:inherit;cursor:pointer">Pay now</button>
+</form>{% endif %}
+</span>
+</td>
+</tr>{% empty %}
+<tr>
+<td colspan="4">No fees have been posted to your account.</td>
+</tr>{% endfor %}
+</tbody>
+</table>
+</section>
+<section id="materials" class="panel">
+<div class="panel-head">
+<div>
+<h2>Latest study materials</h2>
+<small style="color:var(--muted)">Shared by your subject teachers</small>
+</div>
+<a href="#" style="color:var(--green);font-size:13px">View library</a>
+</div>
+<div class="resource-grid">
+<a class="resource" href="#">
+<i data-lucide="file-text">
+</i>
+<div>
+<strong>Mathematics revision pack</strong>
+<br>
+<small>SSS 2 &middot; PDF &middot; 2.4 MB</small>
+</div>
+</a>
+<a class="resource" href="#">
+<i data-lucide="file-text">
+</i>
+<div>
+<strong>English literature guide</strong>
+<br>
+<small>SSS 2 &middot; PDF &middot; 1.8 MB</small>
+</div>
+</a>
+</div>
+</section>
+</section>
+</div>
+</main>
+<script>lucide.createIcons()</script>
 </body>
 </html>

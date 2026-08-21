@@ -1,0 +1,70 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="{% static 'portal/site.css' %}">
+<title>Staff Portal | EPM</title>
+</head>
+<body class="portal-body">
+<header class="dash-nav">
+<div class="shell">
+<a class="brand" href="/">
+<span class="mark">EP</span>
+<span>EDOR PETER'S<br>MEMORIAL SCHOOL</span>
+</a>
+<a href="{% url 'logout' %}">Sign out</a>
+</div>
+</header>
+<main class="dashboard">
+<div class="dash-head">
+<div>
+<div class="eyebrow" style="color:var(--green)">Staff workspace</div>
+<h1>Teaching & learning centre</h1>
+<p>Manage classes, resources and assessments.</p>
+</div>
+</div>
+<div class="main-grid">
+<div class="metric">
+<strong>6</strong>
+<span>Assigned classes</span>
+</div>
+<div class="metric">
+<strong>4</strong>
+<span>Assessments due</span>
+</div>
+<div class="metric">
+<strong>12</strong>
+<span>New submissions</span>
+</div>
+</div>
+<section class="panel">
+<h2>Today's teaching schedule</h2>
+<table class="table">
+<thead>
+<tr>
+<th>Time</th>
+<th>Class</th>
+<th>Subject</th>
+<th>Room</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>08:00</td>
+<td>SS 2A</td>
+<td>Mathematics</td>
+<td>Block B</td>
+</tr>
+<tr>
+<td>10:30</td>
+<td>SS 1C</td>
+<td>Mathematics</td>
+<td>Block A</td>
+</tr>
+</tbody>
+</table>
+</section>
+</main>
+</body>
+</html>

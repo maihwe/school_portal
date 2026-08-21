@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ompu5u24w^y272#9&i!&_4(8!z4xhm-n0c-o0_by@p1#k&$8+5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 
 # Application definition
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'portal',  
+    'portal.apps.PortalConfig',
 ]
 
 MIDDLEWARE = [
@@ -116,3 +116,7 @@ USE_TZ = True
 # https://djangoproject.com
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'portal' / 'static']
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'student_dashboard'
+LOGOUT_REDIRECT_URL = 'home'

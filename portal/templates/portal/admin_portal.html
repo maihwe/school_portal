@@ -1,0 +1,68 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="{% static 'portal/site.css' %}">
+<title>School Management | EPM</title>
+</head>
+<body class="portal-body">
+<header class="dash-nav">
+<div class="shell">
+<a class="brand" href="/">
+<span class="mark">EP</span>
+<span>EDOR PETER'S<br>MEMORIAL SCHOOL</span>
+</a>
+<a href="{% url 'logout' %}">Sign out</a>
+</div>
+</header>
+<main class="dashboard">
+<div class="dash-head">
+<div>
+<div class="eyebrow" style="color:var(--green)">School management</div>
+<h1>School operations overview</h1>
+<p>Monitor enrolment, billing and academic records.</p>
+</div>
+<a class="button" href="/admin/">Open school management</a>
+</div>
+<div class="main-grid">
+<div class="metric">
+<strong>1,240</strong>
+<span>Active students</span>
+</div>
+<div class="metric">
+<strong>84%</strong>
+<span>Fee collection</span>
+</div>
+<div class="metric">
+<strong>32</strong>
+<span>Teaching staff</span>
+</div>
+</div>
+<section class="panel">
+<h2>Action required</h2>
+<table class="table">
+<thead>
+<tr>
+<th>Task</th>
+<th>Owner</th>
+<th>Due</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Approve SS 2 results</td>
+<td>Academic office</td>
+<td>Today</td>
+</tr>
+<tr>
+<td>Review outstanding invoices</td>
+<td>Bursary</td>
+<td>23 Aug</td>
+</tr>
+</tbody>
+</table>
+</section>
+</main>
+</body>
+</html>
