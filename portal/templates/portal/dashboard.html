@@ -35,7 +35,7 @@
 <h1>Welcome back, {{ student.user.first_name }}.</h1>
 <p>{{ student.current_class }} &middot; {{ student.student_id }} &middot; 2026/2027 session</p>
 </div>
-<span style="font-size:13px;color:var(--muted)">Friday, 21 August 2026</span>
+<span style="font-size:13px;color:var(--muted)">{% now "l, j F Y" %}</span>
 </div>
 <div class="dash-grid">
 <aside class="side">
