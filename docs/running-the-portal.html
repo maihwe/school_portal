@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Running the EPM School Portal</title>
+<style>
+  @page { size: A4; margin: 15mm 14mm 14mm 14mm; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html { font-size: 10.5pt; }
+  body {
+    margin: 0;
+    font-family: "DejaVu Sans", "Liberation Sans", "Helvetica Neue", Arial, sans-serif;
+    color: #1d2a33;
+    line-height: 1.55;
+  }
+  code, pre, .mono { font-family: "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace; }
+
+  /* ---------- cover ---------- */
+  .cover { border-top: 5px solid #1f7a4d; padding-top: 16px; margin-bottom: 26px; }
+  .brandline { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .mark {
+    width: 34px; height: 34px; border-radius: 9px; background: #1f7a4d; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13pt; letter-spacing: .5px; flex: none;
+  }
+  .brandline .who { font-size: 8.5pt; font-weight: 700; letter-spacing: .07em; color: #5a6b78; text-transform: uppercase; }
+  h1 { font-size: 23pt; line-height: 1.15; margin: 0 0 8px; letter-spacing: -.02em; }
+  .subtitle { font-size: 11.5pt; color: #4a5c69; margin: 0 0 16px; max-width: 88%; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; font-size: 8.5pt; }
+  .meta span { background: #f1f6f3; border: 1px solid #d7e6dd; color: #2c5c44; padding: 3px 9px; border-radius: 20px; font-weight: 600; }
+
+  /* ---------- structure ---------- */
+  h2 {
+    font-size: 13pt; margin: 26px 0 10px; padding-bottom: 6px;
+    border-bottom: 1.5px solid #e3e9ed; break-after: avoid; letter-spacing: -.01em;
+  }
+  h3 { font-size: 10.5pt; margin: 16px 0 6px; break-after: avoid; color: #16232c; }
+  p { margin: 0 0 9px; }
+  ul, ol { margin: 0 0 10px; padding-left: 20px; }
+  li { margin-bottom: 4px; }
+  .lead { font-size: 10.5pt; color: #3d4e5a; }
+
+  /* ---------- step blocks ---------- */
+  .step { margin: 0 0 15px; break-inside: avoid; }
+  .step-head { display: flex; align-items: baseline; gap: 9px; margin-bottom: 7px; }
+  .num {
+    flex: none; width: 21px; height: 21px; border-radius: 50%;
+    background: #1f7a4d; color: #fff; font-size: 9pt; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+    position: relative; top: 1px;
+  }
+  .step-title { font-weight: 700; font-size: 11pt; }
+  .step-body { padding-left: 30px; }
+
+  /* ---------- code ---------- */
+  pre {
+    background: #16232c; color: #e8f1ec; border-radius: 6px;
+    padding: 9px 12px; margin: 0 0 8px; font-size: 8.8pt;
+    white-space: pre-wrap; word-break: break-word; line-height: 1.5;
+  }
+  pre .c { color: #8fae9d; }
+  code:not(pre code) {
+    background: #eef3f0; border: 1px solid #dbe6e0; border-radius: 4px;
+    padding: .5px 4px; font-size: 8.9pt; color: #1c4a35;
+  }
+
+  /* ---------- tables ---------- */
+  table { width: 100%; border-collapse: collapse; margin: 0 0 11px; font-size: 9.3pt; break-inside: avoid; }
+  th {
+    background: #f1f6f3; text-align: left; font-size: 8.2pt; text-transform: uppercase;
+    letter-spacing: .05em; color: #35604c; padding: 6px 9px; border-bottom: 1.5px solid #cfe0d6;
+  }
+  td { padding: 6px 9px; border-bottom: 1px solid #e8eef1; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td.k { font-weight: 600; white-space: nowrap; }
+
+  /* ---------- callouts ---------- */
+  .note, .warn, .tip {
+    border-radius: 6px; padding: 9px 12px 9px 13px; margin: 0 0 10px;
+    font-size: 9.3pt; break-inside: avoid;
+  }
+  .note { background: #f2f7fa; border-left: 3px solid #4d8fb5; }
+  .warn { background: #fdf4ed; border-left: 3px solid #d9822b; }
+  .tip  { background: #f1f8f3; border-left: 3px solid #1f7a4d; }
+  .note b, .warn b, .tip b { display: block; margin-bottom: 2px; }
+
+  .tree { font-size: 8.6pt; background: #f7f9fa; border: 1px solid #e3e9ed; border-radius: 6px; padding: 10px 13px; white-space: pre; line-height: 1.5; color: #34454f; break-inside: avoid; }
+  .tree b { color: #16232c; }
+  .foot { margin-top: 24px; padding-top: 10px; border-top: 1px solid #e3e9ed; font-size: 8.2pt; color: #7b8b96; }
+  .keep { break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="brandline">
+    <div class="mark">EP</div>
+    <div class="who">Edor Peter's Memorial Secondary School<br>Ogore-Ito, Obi LGA, Benue State</div>
+  </div>
+  <h1>Running the School Portal</h1>
+  <p class="subtitle">Step-by-step instructions for installing, starting and exploring the Django student portal &mdash; with the demo accounts and a guided walkthrough of every screen.</p>
+  <div class="meta">
+    <span>Django 6.0.7</span>
+    <span>Python 3.12</span>
+    <span>SQLite</span>
+    <span>Updated 14 September 2026</span>
+  </div>
+</div>
+
+<p class="lead">The portal is a single Django project. Students sign in to see exam results &mdash; unlocked with a 12-digit scratch-card PIN &mdash; and to view and settle school fee invoices. Staff and administrators have their own areas, and <code>/admin/</code> provides full record management. Everything below runs locally; no internet connection or external service is required after the dependencies are installed.</p>
+
+<h2>Before you start</h2>
+
+<table>
+  <tr><th style="width:32%">Requirement</th><th>Notes</th></tr>
+  <tr><td class="k">Python 3.12</td><td>Check with <code>python3 --version</code>. The project's virtual environment is already built for 3.12.</td></tr>
+  <tr><td class="k">Project folder</td><td><code>/home/student/school_portal</code> &mdash; all commands below are run from here.</td></tr>
+  <tr><td class="k">A web browser</td><td>Chrome, Firefox or similar.</td></tr>
+  <tr><td class="k">Port 8000 free</td><td>Django's development server binds to <code>127.0.0.1:8000</code> by default.</td></tr>
+</table>
+
+<div class="tip"><b>The virtual environment already exists</b>
+The <code>venv/</code> folder ships with the project and already contains Django and Pillow. If it works, skip Step 3 entirely &mdash; you only need Steps 4&ndash;6 to get running.</div>
+
+<div class="keep">
+<h2>Project layout</h2>
+<p>You do not need to understand every file to run the app, but these are the ones that matter when something goes wrong.</p>
+
+<div class="tree"><b>school_portal/</b>
+├── manage.py                  <b>← every command starts with this</b>
+├── db.sqlite3                 the database (already seeded)
+├── venv/                      virtual environment with Django + Pillow
+├── school_system/
+│   ├── settings.py            <b>← ALLOWED_HOSTS, TIME_ZONE, database</b>
+│   └── urls.py                routes /admin/ and the portal
+└── portal/
+    ├── models.py              StudentProfile, ExamResult, SchoolFeeInvoice
+    ├── views.py               <b>← the page logic</b>
+    ├── urls.py                /login/, /student/, /staff/, /portal-admin/
+    ├── admin.py               Django admin configuration
+    ├── signals.py             auto-creates a profile for each new user
+    ├── templates/portal/      dashboard.html, home.html, login.html, …
+    └── management/commands/
+        └── seed_demo.py       <b>← creates the demo accounts</b></div>
+</div>
+
+<h2>Setting it up</h2>
+
+<div class="step">
+  <div class="step-head"><span class="num">1</span><span class="step-title">Open a terminal in the project folder</span></div>
+  <div class="step-body">
+<pre>cd /home/student/school_portal</pre>
+    <p>Every command in this guide assumes you are in this folder.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="num">2</span><span class="step-title">Confirm the virtual environment is present</span></div>
+  <div class="step-body">
+<pre>ls venv/bin/python</pre>
+    <p>If that prints a path, you are ready &mdash; jump to <b>Step 4</b>. If it reports <i>No such file or directory</i>, do Step 3 first.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="num">3</span><span class="step-title">Rebuild the environment (only if Step 2 failed)</span></div>
+  <div class="step-body">
+<pre>python3 -m venv venv
+./venv/bin/pip install "Django==6.0.7" "Pillow==12.3.0"</pre>
+    <div class="warn"><b>Pillow is not optional</b>
+The student profile stores a passport photograph in an <code>ImageField</code>. Without Pillow, Django refuses to start and reports <i>Cannot use ImageField because Pillow is not installed</i>.</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="num">4</span><span class="step-title">Create the database tables</span></div>
+  <div class="step-body">
+<pre>./venv/bin/python manage.py migrate</pre>
+    <p>This applies the four migrations in <code>portal/migrations/</code> and creates the tables for student profiles, exam results and fee invoices. The project ships with <code>db.sqlite3</code> already migrated, so you will normally see <i>No migrations to apply</i> &mdash; that is success, not a problem.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="num">5</span><span class="step-title">Create the demo accounts</span></div>
+  <div class="step-body">
+<pre>./venv/bin/python manage.py seed_demo</pre>
+    <p>On success it prints:</p>
+<pre><span class="c">Student: demo.student / EPMdemo2026! | Result PIN: 123456789012
+Administrator: demo.admin / AdminDemo2026!</span></pre>
+    <p>It also creates four SS 2 subjects for the demo student and one unpaid fee invoice of <b>NGN 185,000.00</b>, so there is real data on screen.</p>
+    <div class="note"><b>Safe to re-run</b>
+The command uses <code>get_or_create</code>, so running it again will not duplicate records or wipe anything.</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="num">6</span><span class="step-title">Start the server</span></div>
+  <div class="step-body">
+<pre>./venv/bin/python manage.py runserver</pre>
+    <p>Wait for the line <code>Starting development server at http://127.0.0.1:8000/</code>, then open that address in your browser. Leave this terminal running &mdash; it is the web server. You will need a second terminal for any other command.</p>
+    <div class="warn"><b>Use 127.0.0.1, not localhost</b>
+<code>localhost</code> usually works too, but the project's <code>ALLOWED_HOSTS</code> permits only <code>127.0.0.1</code>, <code>localhost</code> and <code>testserver</code>. Any other hostname &mdash; a machine name, an IP from another device &mdash; is rejected with a <i>DisallowedHost</i> error.</div>
+  </div>
+</div>
+
+<h2>Signing in</h2>
+
+<p>Open <b>http://127.0.0.1:8000/</b> and click <b>Portal login</b> in the top-right of the menu bar.</p>
+
+<table>
+  <tr><th style="width:26%">Role</th><th style="width:30%">Username</th><th>Password</th></tr>
+  <tr><td class="k">Student</td><td><code>demo.student</code></td><td><code>EPMdemo2026!</code></td></tr>
+  <tr><td class="k">Administrator</td><td><code>demo.admin</code></td><td><code>AdminDemo2026!</code></td></tr>
+</table>
+
+<div class="note"><b>Sign in with the username, not the admission number</b>
+The login form is labelled &ldquo;Username / Admission number&rdquo;, but the project uses Django's stock authentication, which matches on username only. The demo student's admission number is <code>EPM/2026/0042</code> and will <i>not</i> work as a login. This is a known rough edge, not a mistake on your part.</div>
+
+<p>Where each account lands after signing in:</p>
+<table>
+  <tr><th style="width:26%">Account type</th><th>Redirected to</th></tr>
+  <tr><td class="k">Student</td><td><code>/student/</code> &mdash; the student dashboard</td></tr>
+  <tr><td class="k">Staff (not superuser)</td><td><code>/staff/</code> &mdash; the staff workspace</td></tr>
+  <tr><td class="k">Superuser</td><td><code>/portal-admin/</code> &mdash; the management overview</td></tr>
+</table>
+
+<h2>Guided walkthrough</h2>
+
+<h3>1 &nbsp;The public home page</h3>
+<p>Before logging in you land on the school's marketing page &mdash; about the school, academic pathways, admissions. Click <b>Portal login</b> when you are ready.</p>
+
+<h3>2 &nbsp;The student dashboard &mdash; and the correction</h3>
+<p>Sign in as <code>demo.student</code>. The dashboard has three metric cards (current class, outstanding balance, current term), then panels for results, fees and study materials.</p>
+<p>Look at the <b>date in the top-right corner of the header</b>. It previously read <code>Friday, 21 August 2026</code> &mdash; a fixed string typed into the template when the project was built, so every student was shown that same stale date forever. It now reports the real current date and advances on its own:</p>
+<table>
+  <tr><th style="width:22%">Before</th><th>After</th></tr>
+  <tr><td><code>Friday, 21 August 2026</code></td><td>Today's date, e.g. <code>Monday, 14 September 2026</code></td></tr>
+</table>
+<p>The timezone was also corrected from UTC to <code>Africa/Lagos</code>, so the date is Nigeria local time rather than an hour behind &mdash; which also fixes the &ldquo;Date issued&rdquo; column in the fees table.</p>
+
+<h3>3 &nbsp;Unlock the exam results</h3>
+<p>In the <b>Academic results</b> panel, type the result-checker PIN <code>123456789012</code> and press <b>Check result</b>. The table unlocks with four SS 2 subjects, each showing CA score out of 30, exam score out of 70 and the total, plus a print button.</p>
+<ul>
+  <li>Try a <b>wrong</b> PIN first (for example <code>000000000000</code>) to see the red scratch-card error.</li>
+  <li>The results are never sent to the browser until the PIN matches &mdash; the check happens on the server.</li>
+  <li>Reloading the page re-locks the results and asks for the PIN again. The PIN is not remembered between page loads.</li>
+</ul>
+
+<h3>4 &nbsp;Fees &amp; payments</h3>
+<p>The <b>Outstanding balance</b> card shows <b>NGN 185000.00</b>, matching the single unpaid invoice below it. Each unpaid invoice carries a <b>Pay now</b> button.</p>
+<div class="warn"><b>This button does not take money</b>
+&ldquo;Pay now&rdquo; marks the invoice as paid immediately and writes a fabricated reference such as <code>EPM-DEMO-20260914…</code>. There is no payment gateway behind it. It is a deliberate placeholder &mdash; the view and URL are both named <code>demo_payment</code> &mdash; but be aware that anyone with a student login can clear a fee balance with one click. Press it to see the balance fall to NGN 0.</div>
+
+<h3>5 &nbsp;The staff and management areas</h3>
+<p>Sign out, then sign in as <code>demo.admin</code> and you will land on <code>/portal-admin/</code>. These two screens are currently static mock-ups &mdash; the figures and schedules are placeholder content, not live data. The working administrative interface is Django's own, at <b>/admin/</b>.</p>
+
+<h3>6 &nbsp;The Django admin</h3>
+<p>Visit <b>http://127.0.0.1:8000/admin/</b> as <code>demo.admin</code>. From here you can add and edit students, record exam results, post fee invoices and upload passport photographs. Use <code>seed_demo</code>-style data or the &ldquo;Add&rdquo; buttons to explore.</p>
+
+<h2>Stopping and restarting</h2>
+<p>In the terminal running the server, press <b>Ctrl&nbsp;+&nbsp;C</b> to stop it. To start it again, re-run <code>./venv/bin/python manage.py runserver</code> &mdash; the database keeps your data between runs, so you do not need to re-run <code>migrate</code> or <code>seed_demo</code>.</p>
+<p>Because the server auto-reloads when you save a Python file, most edits take effect without a restart. Template changes appear on the next page refresh.</p>
+
+<h2>If something goes wrong</h2>
+
+<table>
+  <tr><th style="width:44%">Message</th><th>What to do</th></tr>
+  <tr><td><code>DisallowedHost</code> at /</td><td>You used a hostname other than <code>127.0.0.1</code> or <code>localhost</code>. Use <code>http://127.0.0.1:8000/</code>, or add your hostname to <code>ALLOWED_HOSTS</code> in <code>school_system/settings.py</code>.</td></tr>
+  <tr><td><code>ModuleNotFoundError: No module named 'django'</code></td><td>You ran plain <code>python</code> instead of the environment's interpreter. Every command must start with <code>./venv/bin/python</code>.</td></tr>
+  <tr><td><code>Cannot use ImageField because Pillow is not installed</code></td><td>Install it: <code>./venv/bin/pip install Pillow</code>.</td></tr>
+  <tr><td><code>no such table: portal_studentprofile</code></td><td>The migrations have not been applied. Run <code>./venv/bin/python manage.py migrate</code>.</td></tr>
+  <tr><td><code>That port is already in use</code></td><td>Another server is still running. Stop it with Ctrl&nbsp;+&nbsp;C in its terminal, or start on a different port: <code>./venv/bin/python manage.py runserver 8001</code>.</td></tr>
+  <tr><td><code>No time zone found with key Africa/Lagos</code></td><td>The system timezone database is missing. Install it with <code>sudo apt install tzdata</code>.</td></tr>
+  <tr><td>Login rejected with the demo credentials</td><td>The accounts may not exist yet, or the password was changed. Re-run <code>./venv/bin/python manage.py seed_demo</code> to reset them to the documented values.</td></tr>
+  <tr><td>Styling looks broken or unstyled</td><td>Static files failed to load. Confirm <code>portal/static/portal/site.css</code> exists and restart the server.</td></tr>
+</table>
+
+<h2>Useful commands</h2>
+<table>
+  <tr><th style="width:56%">Command</th><th>Purpose</th></tr>
+  <tr><td><code>./venv/bin/python manage.py check</code></td><td>Reports configuration and model errors without starting the server.</td></tr>
+  <tr><td><code>./venv/bin/python manage.py makemigrations --check --dry-run</code></td><td>Confirms the migrations match the models. Should print <i>No changes detected</i>.</td></tr>
+  <tr><td><code>./venv/bin/python manage.py seed_demo</code></td><td>Creates or resets the demo student and administrator.</td></tr>
+  <tr><td><code>./venv/bin/python manage.py createsuperuser</code></td><td>Makes a fresh administrator account of your own.</td></tr>
+  <tr><td><code>./venv/bin/python manage.py shell</code></td><td>Interactive Python console with the models loaded.</td></tr>
+</table>
+
+<h2>Resetting to a clean state</h2>
+<p>If the database becomes cluttered and you want to start over, delete it and rebuild. This <b>erases all data</b> you have entered.</p>
+<pre>rm db.sqlite3
+./venv/bin/python manage.py migrate
+./venv/bin/python manage.py seed_demo</pre>
+
+<div class="foot">
+  Edor Peter's Memorial Secondary School &mdash; school portal operator's guide. Prepared 14 September 2026 for Django 6.0.7 on Python 3.12.
+</div>
+
+</body>
+</html>
