@@ -8,7 +8,7 @@ Everything runs locally. No internet connection or external service is required 
 
 | | |
 |---|---|
-| **Framework** | Django 6.0.7 |
+| **Framework** | Django 5.2.19 |
 | **Language** | Python 3.12 |
 | **Database** | SQLite (`db.sqlite3`) |
 | **Also required** | Pillow (student passport photographs) |
@@ -34,13 +34,13 @@ Everything runs locally. No internet connection or external service is required 
 
 | Requirement | Notes |
 |---|---|
-| **Python 3.12** | Check with `python3 --version`. The project's virtual environment is already built for 3.12. |
+| **Python 3.12** | Check with `python3 --version`. Create the project's virtual environment using this Python version. |
 | **Project folder** | `/home/student/school_portal` — all commands below are run from here. |
 | **A web browser** | Chrome, Firefox or similar. |
 | **Port 8000 free** | Django's development server binds to `127.0.0.1:8000` by default. |
 
 > [!TIP]
-> **The virtual environment already exists.** The `venv/` folder ships with the project and already contains Django and Pillow. If it works, skip Step 3 entirely — you only need Steps 4–6 to get running.
+> **Check your local environment first.** The `venv/` folder is created locally and is not included in Git. If it already contains Django and Pillow, skip Step 3 — otherwise create it and install the dependencies below.
 
 ---
 
@@ -51,7 +51,7 @@ You do not need to understand every file to run the app, but these are the ones 
 ```text
 school_portal/
 ├── manage.py                  ← every command starts with this
-├── db.sqlite3                 the database (already seeded)
+├── db.sqlite3                 local database, created by migrate
 ├── venv/                      virtual environment with Django + Pillow
 ├── school_system/
 │   ├── settings.py            ← ALLOWED_HOSTS, TIME_ZONE, database
@@ -91,7 +91,7 @@ If that prints a path, you are ready — jump to **Step 4**. If it reports *No s
 
 ```bash
 python3 -m venv venv
-./venv/bin/pip install "Django==6.0.7" "Pillow==12.3.0"
+./venv/bin/pip install -r requirements.txt
 ```
 
 > [!WARNING]
@@ -103,7 +103,7 @@ python3 -m venv venv
 ./venv/bin/python manage.py migrate
 ```
 
-This applies the four migrations in `portal/migrations/` and creates the tables for student profiles, exam results and fee invoices. The project ships with `db.sqlite3` already migrated, so you will normally see *No migrations to apply* — that is success, not a problem.
+This applies the four migrations in `portal/migrations/` and creates the local database and tables for student profiles, exam results and fee invoices. If you have already migrated this checkout, *No migrations to apply* is success.
 
 ### 5. Create the demo accounts
 
@@ -146,7 +146,9 @@ Open **http://127.0.0.1:8000/** and click **Portal login** in the top-right of t
 | Administrator | `demo.admin` | `AdminDemo2026!` |
 
 > [!NOTE]
-> **Sign in with the username, not the admission number.** The login form is labelled "Username / Admission number", but the project uses Django's stock authentication, which matches on username only. The demo student's admission number is `EPM/2026/0042` and will *not* work as a login. This is a known rough edge, not a mistake on your part.
+> **Students can use their admission number or username.** For the demo student, enter `EPM/2026/0042` or `demo.student`, then the password `EPMdemo2026!`, and click **Log in**. Admission numbers accept upper- or lowercase letters. The result-checker PIN is used on the dashboard after login. Staff and administrators use their usernames on the same login page.
+
+Use **Show password** to check what you typed. If you need your login details or a password reset, open the help section on the login page and visit the school ICT office.
 
 Where each account lands after signing in:
 
@@ -191,9 +193,19 @@ The **Outstanding balance** card shows **NGN 185000.00**, matching the single un
 > [!WARNING]
 > **This button does not take money.** "Pay now" marks the invoice as paid immediately and writes a fabricated reference such as `EPM-DEMO-20260914…`. There is no payment gateway behind it. It is a deliberate placeholder — the view and URL are both named `demo_payment` — but be aware that anyone with a student login can clear a fee balance with one click. Press it to see the balance fall to NGN 0.
 
-### 5. The staff and management areas
+### 5. Enter and update student details
 
-Sign out, then sign in as `demo.admin` and you will land on `/portal-admin/`. These two screens are currently static mock-ups — the figures and schedules are placeholder content, not live data. The working administrative interface is Django's own, at `/admin/`.
+Sign out, then sign in as `demo.admin`. The administrator lands on `/portal-admin/`, which lists the school's actual student records.
+
+1. Click **Add student**.
+2. Fill in **Personal details**: first name and surname are required. Middle name, date of birth, email and passport photograph are optional.
+3. Fill in **School details**: enter a unique admission number and choose the class.
+4. Set the **Login password**. The optional **Result-checker PIN** must contain exactly 12 digits.
+5. Click **Save student**. This creates the account and student profile together. Give the student their admission number and password so they can log in.
+
+To make corrections, search by name or admission number and click **Edit details**. Leave **New login password** blank to keep the current password, or enter a new one to reset it. Click **Save changes** when finished. The links below the form open exam-result and fee-invoice entry with the student selected.
+
+Passport photographs are saved under `media/` and can be opened by the student who owns the photograph or a school administrator. Staff accounts continue to use `/staff/`, whose schedule and figures remain placeholders.
 
 ### 6. The Django admin
 
@@ -255,14 +267,12 @@ These are real limitations of the project as it stands, listed so they are not m
 | Area | Issue |
 |---|---|
 | **Fee payment** | The "Pay now" button clears an invoice without taking payment. The view and URL are both named `demo_payment`; a real gateway (Paystack, Flutterwave, Remita) still needs to be wired in. |
-| **Login label** | The form says "Username / Admission number" but only usernames authenticate. There is no custom authentication backend mapping `EPM/2026/0042` to an account. |
-| **Passport photos** | `StudentProfile.passport_photo` is an `ImageField`, but `settings.py` defines no `MEDIA_URL` or `MEDIA_ROOT` and `urls.py` serves no media route. Uploads land in the process working directory and cannot be displayed. |
 | **Staff profiles** | `seed_demo.py` creates `demo.admin` and *then* promotes it to staff, so the `post_save` guard in `signals.py` has already given it a student profile. Administrators can end up with phantom student records and bogus admission numbers. |
 | **Logout** | `/logout/` is a plain GET link with no `@login_required`, so it can be triggered by a cross-site request. |
 | **Session scoping** | The dashboard's results query filters by student only, not by term or session, so a student with several terms of results sees them all in one table. |
-| **Tests** | `portal/tests.py` is still the empty Django stub — there is no automated test coverage. |
+| **Tests** | Login and student management have automated coverage in `portal/tests.py`; dashboard results and fee payments still need coverage. |
 | **Deployment** | `DEBUG = True` and `SECRET_KEY` is committed in `settings.py`. Both must change before this is exposed to the internet. |
 
 ---
 
-*Edor Peter's Memorial Secondary School — school portal operator's guide. Prepared 14 September 2026 for Django 6.0.7 on Python 3.12.*
+*Edor Peter's Memorial Secondary School — school portal operator's guide. Updated 16 November 2026 for Django 5.2.19 on Python 3.12.*

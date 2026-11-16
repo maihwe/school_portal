@@ -1,0 +1,11 @@
+<div class="field{% if field.errors %} admin-field-error{% endif %}">
+  <label for="{{ field.id_for_label }}">{{ field.label }} <span class="admin-field-status">{% if field.field.required %}Required{% else %}Optional{% endif %}</span></label>
+  {% if field.name == 'login_password' %}
+  <div class="password-field">
+    {{ field }}
+    <button class="password-toggle" type="button" aria-controls="id_password" aria-pressed="false" hidden>Show password</button>
+  </div>
+  {% else %}{{ field }}{% endif %}
+  {% if field.help_text %}<small id="{{ field.auto_id }}_helptext">{{ field.help_text }}</small>{% endif %}
+  {% if field.errors %}<ul class="errorlist" id="{{ field.auto_id }}_error">{% for error in field.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+</div>

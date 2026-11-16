@@ -1,68 +1,58 @@
-{% load static %}
-<!doctype html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="{% static 'portal/site.css' %}">
-<title>School Management | EPM</title>
-</head>
-<body class="portal-body">
-<header class="dash-nav">
-<div class="shell">
-<a class="brand" href="/">
-<span class="mark">EP</span>
-<span>EDOR PETER'S<br>MEMORIAL SCHOOL</span>
-</a>
-<a href="{% url 'logout' %}">Sign out</a>
+{% extends 'portal/admin_base.html' %}
+{% block title %}Student Management | EPM{% endblock %}
+{% block content %}
+<div class="dash-head admin-heading">
+  <div>
+    <div class="eyebrow">School management</div>
+    <h1>Student details</h1>
+    <p>Add a student or find an existing record to update.</p>
+  </div>
+  <a class="button" href="{% url 'admin_student_add' %}">Add student</a>
 </div>
-</header>
-<main class="dashboard">
-<div class="dash-head">
-<div>
-<div class="eyebrow" style="color:var(--green)">School management</div>
-<h1>School operations overview</h1>
-<p>Monitor enrolment, billing and academic records.</p>
-</div>
-<a class="button" href="/admin/">Open school management</a>
-</div>
-<div class="main-grid">
-<div class="metric">
-<strong>1,240</strong>
-<span>Active students</span>
-</div>
-<div class="metric">
-<strong>84%</strong>
-<span>Fee collection</span>
-</div>
-<div class="metric">
-<strong>32</strong>
-<span>Teaching staff</span>
-</div>
-</div>
-<section class="panel">
-<h2>Action required</h2>
-<table class="table">
-<thead>
-<tr>
-<th>Task</th>
-<th>Owner</th>
-<th>Due</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Approve SS 2 results</td>
-<td>Academic office</td>
-<td>Today</td>
-</tr>
-<tr>
-<td>Review outstanding invoices</td>
-<td>Bursary</td>
-<td>23 Aug</td>
-</tr>
-</tbody>
-</table>
+<section class="admin-guide" aria-labelledby="guide-heading">
+  <h2 id="guide-heading">How to enter a student</h2>
+  <ol>
+    <li><strong>Click Add student</strong><span>Enter the student's name, admission number and class.</span></li>
+    <li><strong>Set the login password</strong><span>You can also add a photograph and result-checker PIN.</span></li>
+    <li><strong>Save student</strong><span>Give the student their admission number and login password.</span></li>
+  </ol>
 </section>
-</main>
-</body>
-</html>
+<section class="panel admin-students" aria-labelledby="students-heading">
+  <div class="panel-head">
+    <h2 id="students-heading">Student records <span class="admin-count">{{ student_count }}</span></h2>
+  </div>
+  <form class="admin-search" method="get" action="{% url 'admin_portal' %}">
+    <div class="field">
+      <label for="student-search">Find a student by name or admission number</label>
+      <input id="student-search" type="search" name="q" value="{{ query }}" placeholder="Name or admission number">
+    </div>
+    <button class="button" type="submit">Search</button>
+    {% if query %}<a class="admin-link" href="{% url 'admin_portal' %}">Clear search</a>{% endif %}
+  </form>
+  {% if query %}<p class="admin-search-count">{{ students.paginator.count }} record{{ students.paginator.count|pluralize }} found for “{{ query }}”.</p>{% endif %}
+  <ul class="admin-student-list">
+    {% for student in students %}
+    <li>
+      <div class="admin-student-name">
+        <strong>{{ student.user.first_name }}{% if student.middle_name %} {{ student.middle_name }}{% endif %} {{ student.user.last_name }}</strong>
+        <span>{{ student.student_id }}</span>
+      </div>
+      <span class="badge">{{ student.current_class }}</span>
+      <a class="admin-link" href="{% url 'admin_student_edit' student.pk %}" aria-label="Edit details for {{ student.user.get_full_name }} ({{ student.student_id }})">Edit details</a>
+    </li>
+    {% empty %}
+    <li class="admin-empty">
+      {% if query %}No students match your search. Try their admission number or surname.
+      {% else %}No student records yet. Click Add student to enter the first student.{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% if students.has_other_pages %}
+  <nav class="admin-pagination" aria-label="Student list pages">
+    {% if students.has_previous %}<a class="admin-link" href="?q={{ query|urlencode }}&amp;page={{ students.previous_page_number }}">Previous</a>{% endif %}
+    <span>Page {{ students.number }} of {{ students.paginator.num_pages }}</span>
+    {% if students.has_next %}<a class="admin-link" href="?q={{ query|urlencode }}&amp;page={{ students.next_page_number }}">Next</a>{% endif %}
+  </nav>
+  {% endif %}
+</section>
+{% endblock %}

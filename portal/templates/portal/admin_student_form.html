@@ -1,0 +1,72 @@
+{% extends 'portal/admin_base.html' %}
+{% load static %}
+{% block title %}{% if student %}Edit Student{% else %}Add Student{% endif %} | EPM{% endblock %}
+{% block scripts %}<script src="{% static 'portal/login.js' %}" defer></script>{% endblock %}
+{% block content %}
+<a class="admin-link admin-back" href="{% url 'admin_portal' %}">&larr; Back to student records</a>
+<div class="dash-head admin-heading">
+  <div>
+    <div class="eyebrow">School management</div>
+    <h1>{% if student %}Edit student details{% else %}Add a student{% endif %}</h1>
+    <p>{% if student %}Update the details below and save your changes.{% else %}Enter the details below to create the student's record and login together.{% endif %}</p>
+  </div>
+</div>
+{% if student %}
+<div class="admin-guide admin-login-info">
+  <strong>Student login: {{ student.student_id }}</strong>
+  <p>The student can log in with their admission number and password.</p>
+</div>
+{% endif %}
+<form class="admin-details-form" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% if form.errors %}
+  <div class="error admin-form-errors" role="alert">
+    <strong>The student details have not been saved.</strong>
+    <p>Correct the highlighted fields below and save again.</p>
+    {{ form.non_field_errors }}
+  </div>
+  {% endif %}
+  <fieldset class="panel admin-form-section">
+    <legend><span>1</span> Personal details</legend>
+    <p>Enter the student's name as it appears on their school record.</p>
+    <div class="admin-fields">
+      {% include 'portal/admin_field.html' with field=form.first_name %}
+      {% include 'portal/admin_field.html' with field=form.middle_name %}
+      {% include 'portal/admin_field.html' with field=form.last_name %}
+      {% include 'portal/admin_field.html' with field=form.date_of_birth %}
+      {% include 'portal/admin_field.html' with field=form.email %}
+      {% include 'portal/admin_field.html' with field=form.passport_photo %}
+    </div>
+  </fieldset>
+  <fieldset class="panel admin-form-section">
+    <legend><span>2</span> School details</legend>
+    <p>The admission number is also used to log in to the student portal.</p>
+    <div class="admin-fields">
+      {% include 'portal/admin_field.html' with field=form.student_id %}
+      {% include 'portal/admin_field.html' with field=form.current_class %}
+    </div>
+  </fieldset>
+  <fieldset class="panel admin-form-section">
+    <legend><span>3</span> Login and results access</legend>
+    <p>{% if student %}You can reset the login password here, or leave it blank to keep it.{% else %}Set a login password and give it to the student after saving.{% endif %} The result-checker PIN unlocks exam results after login.</p>
+    <div class="admin-fields">
+      {% include 'portal/admin_field.html' with field=form.login_password %}
+      {% include 'portal/admin_field.html' with field=form.result_pin %}
+    </div>
+  </fieldset>
+  <div class="admin-form-actions">
+    <button class="button" type="submit">{% if student %}Save changes{% else %}Save student{% endif %}</button>
+    <a class="admin-link" href="{% url 'admin_portal' %}">Cancel</a>
+  </div>
+</form>
+{% if student %}
+<section class="panel admin-next-steps" aria-labelledby="next-heading">
+  <h2 id="next-heading">Other records for this student</h2>
+  <p>Once the student details are saved, you can enter exam results or school fees.</p>
+  <div class="admin-form-actions">
+    <a class="admin-link" href="{% url 'admin:portal_examresult_add' %}?student={{ student.pk }}">Enter exam results</a>
+    <a class="admin-link" href="{% url 'admin:portal_schoolfeeinvoice_add' %}?student={{ student.pk }}">Add fee invoice</a>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

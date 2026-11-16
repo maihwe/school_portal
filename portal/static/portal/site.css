@@ -44,14 +44,38 @@ a{text-decoration:none;color:inherit}
 .footer .shell{display:flex;justify-content:space-between;align-items:start}
 .footer p{color:#99afbd;font-size:13px;max-width:430px;line-height:1.7}
 .footer-links{display:flex;gap:18px;font-size:13px}
-.login-page{min-height:100vh;background:linear-gradient(105deg,#f5faf8 0%,#f5faf8 48%,transparent 48%),url('https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1500&q=80') center/cover}
-.login-nav{height:82px}
-.login-wrap{width:min(1080px,calc(100% - 40px));margin:58px auto;display:grid;grid-template-columns:1fr 410px;gap:90px;align-items:center}
-.login-copy h1{font:48px/1.08 Georgia,serif;margin:15px 0}
+.login-page{min-height:100vh;background:linear-gradient(135deg,#f5faf8,#eaf2f4)}
+.login-nav{min-height:82px;gap:20px;padding-top:16px;padding-bottom:16px}
+.login-back{color:var(--green);font-size:14px;font-weight:650}
+.login-wrap{width:min(1000px,calc(100% - 40px));margin:48px auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:70px;align-items:center}
+.login-copy .eyebrow{color:var(--green)}
+.login-copy h2{font:42px/1.15 Georgia,serif;margin:15px 0}
 .login-copy p{color:#536579;line-height:1.7;max-width:460px}
-.login-card{background:white;padding:35px;box-shadow:0 17px 38px #17324920;border-top:5px solid var(--green)}
-.login-card h2{font-size:22px;margin:0 0 7px}
-.login-card p{color:var(--muted);font-size:14px;margin:0 0 24px}
+.login-steps{padding-left:25px;margin:28px 0 0}
+.login-steps li{padding-left:8px;margin-bottom:22px;line-height:1.5}
+.login-steps li::marker{color:var(--green);font-weight:800}
+.login-steps strong,.login-steps span{display:block}
+.login-steps span{color:#536579;font-size:14px;margin-top:4px}
+.login-card{min-width:0;background:white;padding:32px;box-shadow:0 17px 38px #17324912;border:1px solid var(--line);border-top:5px solid var(--green);border-radius:10px}
+.login-card h1{font-size:28px;margin:0 0 8px}
+.login-card p{color:#536579;font-size:14px;line-height:1.6;margin:0 0 24px}
+.login-card .field{margin-bottom:22px}
+.login-card .field label{font-size:14px}
+.login-card .field input{min-height:48px}
+.login-card .field small{display:block;color:#536579;font-size:12px;line-height:1.6;margin-top:7px}
+.password-field{display:flex;align-items:stretch;gap:8px}
+.password-field input{min-width:0;flex:1}
+.password-toggle{flex-shrink:0;max-width:95px;border:1px solid var(--line);border-radius:4px;background:#f5faf8;color:var(--green);font-family:inherit;font-size:12px;font-weight:600;line-height:1.4;cursor:pointer;padding:8px}
+.password-toggle[hidden]{display:none}
+.login-submit{width:100%;min-height:48px}
+.login-help{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;line-height:1.6}
+.login-help summary{color:var(--green);font-weight:650;cursor:pointer}
+.login-help p{margin:12px 0 0}
+.login-card .staff-login-note{font-size:12px;margin:20px 0 0}
+.login-page :focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.login-card input[aria-invalid="true"]{border-color:#b42318}
+.login-card .error{line-height:1.6;padding:12px;border-radius:4px;margin-bottom:20px}
+.login-card .error strong{display:block}
 .field{margin-bottom:16px}
 .field label{display:block;font-size:13px;font-weight:750;margin-bottom:7px}
 .field input{width:100%;padding:12px;border:1px solid #bccad4;border-radius:3px;font:inherit}
@@ -90,12 +114,72 @@ a{text-decoration:none;color:inherit}
 .resource{border:1px solid var(--line);padding:16px;display:flex;gap:12px;align-items:center}
 .resource i{color:#b35c1e}
 .resource small{color:var(--muted)}
+.admin-workspace{max-width:1040px}
+.admin-page .eyebrow{color:var(--green)}
+.admin-page :focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.admin-nav-links{display:flex;gap:22px;align-items:center;font-size:13px}
+.admin-heading{gap:20px;align-items:center}
+.admin-heading p{line-height:1.6}
+.admin-heading .button{flex-shrink:0;min-height:46px}
+.admin-guide{background:#e8f5ef;border:1px solid #c4e3d5;padding:24px;border-radius:8px;margin-bottom:24px}
+.admin-guide h2{font-size:17px;margin:0 0 18px}
+.admin-guide ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;padding-left:20px;margin:0}
+.admin-guide li{padding-left:4px;font-size:14px;line-height:1.6}
+.admin-guide li::marker{color:var(--green);font-weight:800}
+.admin-guide strong,.admin-guide span{display:block}
+.admin-guide span{font-size:13px;color:#536579;margin-top:4px}
+.admin-students{border-radius:8px}
+.admin-count{background:var(--mint);color:var(--green);padding:3px 9px;border-radius:15px;font-size:13px;margin-left:8px}
+.admin-search{display:flex;align-items:end;gap:12px}
+.admin-search .field{flex:1;min-width:0;margin-bottom:0}
+.admin-search .button{min-height:46px}
+.admin-search>.admin-link{padding-bottom:12px}
+.admin-search-count{font-size:13px;color:#536579;margin:18px 0}
+.admin-link{color:var(--green);font-size:14px;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.admin-back{display:inline-block;margin-bottom:20px}
+.admin-student-list{padding:0;margin:22px 0 0;list-style:none}
+.admin-student-list li{display:flex;align-items:center;gap:24px;padding:18px 0;border-top:1px solid var(--line)}
+.admin-student-name{flex:1;min-width:0;overflow-wrap:anywhere}
+.admin-student-name strong,.admin-student-name span{display:block}
+.admin-student-name span{font-size:13px;color:#536579;margin-top:5px}
+.admin-student-list .badge,.admin-student-list .admin-link{flex-shrink:0}
+.admin-student-list .admin-empty{color:#536579;line-height:1.7;font-size:14px}
+.admin-pagination{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:22px;font-size:13px}
+.admin-message{padding:16px 20px;background:var(--mint);border:1px solid #c4e3d5;border-radius:6px;margin-bottom:22px;line-height:1.6;overflow-wrap:anywhere}
+.admin-login-info p{font-size:14px;color:#536579;line-height:1.6;margin:8px 0 0;overflow-wrap:anywhere}
+.admin-details-form{max-width:940px}
+.admin-form-section{min-width:0;border-radius:8px;padding:20px 24px 8px;margin:24px 0}
+.admin-form-section legend{padding:0 10px;font-size:18px;font-weight:750}
+.admin-form-section legend span{display:inline-grid;place-items:center;background:var(--green);color:white;width:28px;height:28px;border-radius:50%;font-size:14px;margin-right:8px}
+.admin-form-section>p,.admin-next-steps p{color:#536579;font-size:14px;line-height:1.6;margin:0 0 22px}
+.admin-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 24px}
+.admin-fields .field{min-width:0;margin-bottom:22px;font-size:13px;overflow-wrap:anywhere}
+.admin-fields label{font-size:14px;line-height:1.5}
+.admin-field-status{color:#536579;font-size:11px;font-weight:500;margin-left:6px}
+.admin-fields input:not([type=checkbox]),.admin-fields select{width:100%;min-width:0;min-height:46px;padding:12px;border:1px solid #bccad4;border-radius:4px;background:white;color:var(--ink);font:inherit;font-size:16px}
+.admin-fields input[type=file]{font-size:12px;padding:10px 8px;margin-top:6px}
+.admin-photo-current{display:flex;align-items:center;gap:12px;margin:8px 0}
+.admin-photo-current img{flex-shrink:0;object-fit:cover;border:1px solid var(--line);border-radius:4px}
+.admin-fields .admin-photo-clear{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;margin:12px 0}
+.admin-photo-clear input{width:auto;margin:0}
+.admin-fields .field small{display:block;color:#536579;font-size:12px;line-height:1.6;margin-top:7px}
+.admin-field-error input,.admin-field-error select{border-color:#b42318!important}
+.admin-fields .errorlist{color:#b42318;font-size:13px;line-height:1.6;padding:0;list-style:none;margin:8px 0 0}
+.admin-form-errors{padding:16px;border-radius:6px;line-height:1.6}
+.admin-form-errors p{margin:4px 0 0}
+.admin-form-actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin:22px 0}
+.admin-form-actions .button{min-height:48px;min-width:180px}
+.admin-next-steps{border-radius:8px}
+.admin-next-steps h2{margin-bottom:12px}
 @media(max-width:780px){.navlinks{display:none}
+.admin-page .dash-nav .shell{flex-wrap:wrap;gap:20px}
+.admin-nav-links{flex-wrap:wrap;gap:16px}
+.admin-guide ol{grid-template-columns:1fr;gap:16px}
 .hero h1{font-size:42px}
 .stats,.feature-grid,.main-grid{grid-template-columns:1fr 1fr}
 .notice,.login-wrap,.dash-grid{grid-template-columns:1fr}
 .login-copy{display:none}
-.login-wrap{margin-top:25px;gap:0}
+.login-wrap{max-width:480px;margin-top:25px;gap:0}
 .footer .shell{display:block}
 .footer-links{margin-top:20px}
 .hero{min-height:550px}
@@ -103,6 +187,21 @@ a{text-decoration:none;color:inherit}
 .section{padding:55px 0}
 }
 @media(max-width:500px){.shell,.dashboard{width:min(100% - 24px,1160px)}
+.admin-heading{align-items:start;flex-direction:column}
+.admin-search{flex-wrap:wrap}
+.admin-search .field{flex-basis:100%}
+.admin-fields{grid-template-columns:minmax(0,1fr)}
+.admin-form-section{padding:16px 16px 0}
+.admin-form-section legend{font-size:16px}
+.admin-students{padding:18px 16px}
+.admin-student-list li{gap:12px;flex-wrap:wrap}
+.admin-student-name{flex-basis:100%}
+.admin-guide{padding:20px}
+.admin-form-actions .button{width:100%}
+.login-nav{flex-wrap:wrap;gap:12px}
+.login-nav .brand{font-size:13px}
+.login-wrap{width:calc(100% - 24px);margin:16px auto 30px}
+.login-card{padding:24px 20px}
 .stats,.feature-grid,.main-grid,.resource-grid{grid-template-columns:1fr}
 .stat{border-bottom:1px solid var(--line);border-right:0}
 .hero h1{font-size:37px}

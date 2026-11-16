@@ -1,0 +1,30 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{% static 'portal/site.css' %}">
+  <title>{% block title %}School Management | EPM{% endblock %}</title>
+  {% block scripts %}{% endblock %}
+</head>
+<body class="portal-body admin-page">
+  <header class="dash-nav">
+    <div class="shell">
+      <a class="brand" href="{% url 'admin_portal' %}">
+        <span class="mark">EP</span>
+        <span>EDOR PETER'S<br>MEMORIAL SCHOOL</span>
+      </a>
+      <nav class="admin-nav-links" aria-label="Administration">
+        <a href="{% url 'admin_portal' %}">Students</a>
+        <a href="{% url 'admin:index' %}">Other school records</a>
+        <a href="{% url 'logout' %}">Sign out</a>
+      </nav>
+    </div>
+  </header>
+  <main class="dashboard admin-workspace">
+    {% for message in messages %}<div class="admin-message" role="status">{{ message }}</div>{% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

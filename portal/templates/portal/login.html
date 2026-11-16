@@ -1,42 +1,59 @@
 {% load static %}
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Portal Login</title>
+<title>Student Login | Edor Peter's Memorial School</title>
 <link rel="stylesheet" href="{% static 'portal/site.css' %}">
+<script src="{% static 'portal/login.js' %}" defer></script>
 </head>
 <body class="login-page">
-<nav class="login-nav shell">
-<a class="brand" href="/">
+<nav class="login-nav shell" aria-label="School navigation">
+<a class="brand" href="{% url 'home' %}">
 <span class="mark">EP</span>
 <span>EDOR PETER'S<br>MEMORIAL SCHOOL</span>
 </a>
-<a href="/" style="color:var(--green)">Back to school site</a>
+<a class="login-back" href="{% url 'home' %}">Back to school site</a>
 </nav>
 <main class="login-wrap">
-<section class="login-copy">
-<div class="eyebrow" style="color:var(--green)">Community portal</div>
-<h1>Stay connected to your school journey.</h1>
-<p>Students can access results, fee records and learning materials. Staff and school administrators have dedicated spaces for their daily work.</p>
+<section class="login-copy" aria-labelledby="welcome-heading">
+<div class="eyebrow">Your school portal</div>
+<h2 id="welcome-heading">Your results, fees and learning materials.</h2>
+<p>Use your school login details to open your student dashboard.</p>
+<ol class="login-steps">
+<li><strong>Find your admission number</strong><span>Use the number on your school records, or your school-issued username.</span></li>
+<li><strong>Enter your password</strong><span>Use the login password given to you by the school.</span></li>
+<li><strong>Click Log in</strong><span>Your student dashboard will open.</span></li>
+</ol>
 </section>
-<section class="login-card">
-<h2>Sign in to your portal</h2>
-<p>Use the credentials provided by the school.</p>{% if form.errors %}
-<div class="error">Your username or password was not recognised.</div>{% endif %}
-<form method="post">{% csrf_token %}
+<section class="login-card" aria-labelledby="login-heading">
+<h1 id="login-heading">Student login</h1>
+<p>Enter your admission number and school password.</p>
+{% if form.errors %}
+<div class="error" id="login-error" role="alert"><strong>We couldn't sign you in.</strong> Check your admission number or username and password, then try again.</div>
+{% endif %}
+<form method="post" action="{% url 'login' %}">{% csrf_token %}
 <div class="field">
-<label>Username / Admission number</label>
-<input name="username" autofocus required>
+<label for="id_username">Admission number or username</label>
+<input id="id_username" name="username" type="text" value="{{ form.username.value|default_if_none:'' }}" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="150" aria-describedby="username-help{% if form.errors %} login-error{% endif %}"{% if form.errors %} aria-invalid="true"{% endif %} autofocus required>
+<small id="username-help">For example: EPM/2026/0042. Your school username also works.</small>
 </div>
 <div class="field">
-<label>Password</label>
-<input type="password" name="password" required>
+<label for="id_password">Password</label>
+<div class="password-field">
+<input id="id_password" type="password" name="password" autocomplete="current-password" aria-describedby="password-help{% if form.errors %} login-error{% endif %}"{% if form.errors %} aria-invalid="true"{% endif %} required>
+<button class="password-toggle" type="button" aria-controls="id_password" aria-pressed="false" hidden>Show password</button>
 </div>
-<button class="button" style="width:100%">Sign in</button>
+<small id="password-help">Your result-checker PIN is used after you log in.</small>
+</div>
+<button class="button login-submit" type="submit">Log in</button>
 </form>
-<p style="margin-top:22px;font-size:12px">Need help? Contact the ICT office.</p>
+<details class="login-help">
+<summary>Forgot your password or need login details?</summary>
+<p>Visit the school ICT office for your login details or a password reset. If you are unsure where to go, ask at the school office.</p>
+</details>
+<p class="staff-login-note">Staff and administrators: use your school username and password here.</p>
 </section>
 </main>
 </body>

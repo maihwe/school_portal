@@ -100,10 +100,10 @@
   <h1>Running the School Portal</h1>
   <p class="subtitle">Step-by-step instructions for installing, starting and exploring the Django student portal &mdash; with the demo accounts and a guided walkthrough of every screen.</p>
   <div class="meta">
-    <span>Django 6.0.7</span>
+    <span>Django 5.2.19</span>
     <span>Python 3.12</span>
     <span>SQLite</span>
-    <span>Updated 14 September 2026</span>
+    <span>Updated 16 November 2026</span>
   </div>
 </div>
 
@@ -113,14 +113,14 @@
 
 <table>
   <tr><th style="width:32%">Requirement</th><th>Notes</th></tr>
-  <tr><td class="k">Python 3.12</td><td>Check with <code>python3 --version</code>. The project's virtual environment is already built for 3.12.</td></tr>
+  <tr><td class="k">Python 3.12</td><td>Check with <code>python3 --version</code>. Create the project's virtual environment using this Python version.</td></tr>
   <tr><td class="k">Project folder</td><td><code>/home/student/school_portal</code> &mdash; all commands below are run from here.</td></tr>
   <tr><td class="k">A web browser</td><td>Chrome, Firefox or similar.</td></tr>
   <tr><td class="k">Port 8000 free</td><td>Django's development server binds to <code>127.0.0.1:8000</code> by default.</td></tr>
 </table>
 
-<div class="tip"><b>The virtual environment already exists</b>
-The <code>venv/</code> folder ships with the project and already contains Django and Pillow. If it works, skip Step 3 entirely &mdash; you only need Steps 4&ndash;6 to get running.</div>
+<div class="tip"><b>Check your local environment first</b>
+The <code>venv/</code> folder is created locally and is not included in Git. If it already contains Django and Pillow, skip Step 3 &mdash; otherwise create it and install the dependencies below.</div>
 
 <div class="keep">
 <h2>Project layout</h2>
@@ -128,7 +128,7 @@ The <code>venv/</code> folder ships with the project and already contains Django
 
 <div class="tree"><b>school_portal/</b>
 ├── manage.py                  <b>← every command starts with this</b>
-├── db.sqlite3                 the database (already seeded)
+├── db.sqlite3                 local database, created by migrate
 ├── venv/                      virtual environment with Django + Pillow
 ├── school_system/
 │   ├── settings.py            <b>← ALLOWED_HOSTS, TIME_ZONE, database</b>
@@ -166,7 +166,7 @@ The <code>venv/</code> folder ships with the project and already contains Django
   <div class="step-head"><span class="num">3</span><span class="step-title">Rebuild the environment (only if Step 2 failed)</span></div>
   <div class="step-body">
 <pre>python3 -m venv venv
-./venv/bin/pip install "Django==6.0.7" "Pillow==12.3.0"</pre>
+./venv/bin/pip install -r requirements.txt</pre>
     <div class="warn"><b>Pillow is not optional</b>
 The student profile stores a passport photograph in an <code>ImageField</code>. Without Pillow, Django refuses to start and reports <i>Cannot use ImageField because Pillow is not installed</i>.</div>
   </div>
@@ -176,7 +176,7 @@ The student profile stores a passport photograph in an <code>ImageField</code>. 
   <div class="step-head"><span class="num">4</span><span class="step-title">Create the database tables</span></div>
   <div class="step-body">
 <pre>./venv/bin/python manage.py migrate</pre>
-    <p>This applies the four migrations in <code>portal/migrations/</code> and creates the tables for student profiles, exam results and fee invoices. The project ships with <code>db.sqlite3</code> already migrated, so you will normally see <i>No migrations to apply</i> &mdash; that is success, not a problem.</p>
+    <p>This applies the four migrations in <code>portal/migrations/</code> and creates the local database and tables for student profiles, exam results and fee invoices. If you have already migrated this checkout, <i>No migrations to apply</i> is success.</p>
   </div>
 </div>
 
@@ -213,8 +213,9 @@ The command uses <code>get_or_create</code>, so running it again will not duplic
   <tr><td class="k">Administrator</td><td><code>demo.admin</code></td><td><code>AdminDemo2026!</code></td></tr>
 </table>
 
-<div class="note"><b>Sign in with the username, not the admission number</b>
-The login form is labelled &ldquo;Username / Admission number&rdquo;, but the project uses Django's stock authentication, which matches on username only. The demo student's admission number is <code>EPM/2026/0042</code> and will <i>not</i> work as a login. This is a known rough edge, not a mistake on your part.</div>
+<div class="note"><b>Students can use their admission number or username</b>
+For the demo student, enter <code>EPM/2026/0042</code> or <code>demo.student</code>, then the password <code>EPMdemo2026!</code>, and click <b>Log in</b>. Admission numbers accept upper- or lowercase letters. Your result-checker PIN is used on the dashboard after login. Staff and administrators use their usernames on the same login page.</div>
+<p>Use <b>Show password</b> to check what you typed. If you need login details or a password reset, open the help section on the login page and visit the school ICT office.</p>
 
 <p>Where each account lands after signing in:</p>
 <table>
@@ -251,8 +252,17 @@ The login form is labelled &ldquo;Username / Admission number&rdquo;, but the pr
 <div class="warn"><b>This button does not take money</b>
 &ldquo;Pay now&rdquo; marks the invoice as paid immediately and writes a fabricated reference such as <code>EPM-DEMO-20260914…</code>. There is no payment gateway behind it. It is a deliberate placeholder &mdash; the view and URL are both named <code>demo_payment</code> &mdash; but be aware that anyone with a student login can clear a fee balance with one click. Press it to see the balance fall to NGN 0.</div>
 
-<h3>5 &nbsp;The staff and management areas</h3>
-<p>Sign out, then sign in as <code>demo.admin</code> and you will land on <code>/portal-admin/</code>. These two screens are currently static mock-ups &mdash; the figures and schedules are placeholder content, not live data. The working administrative interface is Django's own, at <b>/admin/</b>.</p>
+<h3>5 &nbsp;Enter and update student details</h3>
+<p>Sign out, then sign in as <code>demo.admin</code>. The administrator lands on <code>/portal-admin/</code>, which lists the school's actual student records.</p>
+<ol>
+  <li>Click <b>Add student</b>.</li>
+  <li>Fill in <b>Personal details</b>: first name and surname are required. Middle name, date of birth, email and passport photograph are optional.</li>
+  <li>Fill in <b>School details</b>: enter a unique admission number and choose the class.</li>
+  <li>Set the <b>Login password</b>. The optional <b>Result-checker PIN</b> must contain exactly 12 digits.</li>
+  <li>Click <b>Save student</b>. This creates the account and profile together. Give the student their admission number and password so they can log in.</li>
+</ol>
+<p>To make corrections, search by name or admission number and click <b>Edit details</b>. Leave <b>New login password</b> blank to keep the current password, or enter a new one to reset it. Click <b>Save changes</b> when finished. The links below the form open exam-result and fee-invoice entry with the student selected.</p>
+<p>Passport photographs can be opened by the student who owns the photograph or a school administrator. Staff accounts continue to use <code>/staff/</code>, whose schedule and figures remain placeholders.</p>
 
 <h3>6 &nbsp;The Django admin</h3>
 <p>Visit <b>http://127.0.0.1:8000/admin/</b> as <code>demo.admin</code>. From here you can add and edit students, record exam results, post fee invoices and upload passport photographs. Use <code>seed_demo</code>-style data or the &ldquo;Add&rdquo; buttons to explore.</p>
@@ -292,7 +302,7 @@ The login form is labelled &ldquo;Username / Admission number&rdquo;, but the pr
 ./venv/bin/python manage.py seed_demo</pre>
 
 <div class="foot">
-  Edor Peter's Memorial Secondary School &mdash; school portal operator's guide. Prepared 14 September 2026 for Django 6.0.7 on Python 3.12.
+  Edor Peter's Memorial Secondary School &mdash; school portal operator's guide. Updated 16 November 2026 for Django 5.2.19 on Python 3.12.
 </div>
 
 </body>
